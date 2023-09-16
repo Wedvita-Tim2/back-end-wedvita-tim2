@@ -7,5 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
 {
-    use HasFactory;
+    protected $table = 'attachements';
+    protected $fillable = [
+        'event_information_id',
+        'attachment_name',
+    ];
+
+    public function eventInformation()
+    {
+        /**
+         * Belong to Event Information
+         *
+         * @return Collection
+         *
+         **/
+        $this->belongsTo(EventInformation::class);
+    }
 }
