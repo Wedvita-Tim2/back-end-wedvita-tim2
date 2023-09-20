@@ -5,13 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\File;
-use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -45,23 +39,16 @@ class RegisterController extends Controller
             return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors()], 422);
         }
 
-        $now = date('Y-m-d H:i:s');
-        $limit = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($now)));
-
         $user = User::create([
             'username'              => $request->username,
             'email'                 => $request->email,
-            'password'              => Hash::make($request->password),
+            'password'              => bcrypt($request->password),
             'phone_number'          => $request->phone_number,
-            'register_verification' => '1',
-            'role_id'               => '3',
-            'encrypt_id'            => Crypt::encrypt($request->email),
-            'expired_time'          => $limit,
+            'role_id'               => '2',
         ]);
 
-        //Auth::login($user);
-        
         //auto redirect to home
+        //Auth::login($user);
         //return redirect(RouteServiceProvider::HOME); 
 
         return response()->json(['user' => $user,'message' => 'Registration successful',], 201);

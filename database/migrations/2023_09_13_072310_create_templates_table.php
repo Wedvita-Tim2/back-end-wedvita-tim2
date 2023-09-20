@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('template_name');
+            $table->foreignId('user_id');
             $table->timestampsTz();
         });
     }

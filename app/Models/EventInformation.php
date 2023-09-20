@@ -20,15 +20,15 @@ class EventInformation extends Model
         'building_name',
  ];
 
-    public function transaction()
+    public function order()
     {
         /**
-         * Has One to Transaction
+         * Has One to Order
         *
         * @return Collection
         *
         **/
-        return $this->hasOne(Transaction::class);
+        return $this->hasOne(Order::class);
     }
 
     public function attachment()

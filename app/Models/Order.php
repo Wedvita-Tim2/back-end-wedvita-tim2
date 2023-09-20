@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction extends Model
+class Order extends Model
 {
-    protected $table = 'users';
+    protected $table = 'orders';
     protected $fillable = [
-        'transaction_code',
+        'order_code',
         'user_id',
         'template_id',
         'event_information_id',
-        'transaction_verification',
+        'order_verification',
     ];
 
     public function user()

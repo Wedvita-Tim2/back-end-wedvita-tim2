@@ -19,10 +19,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone_number',13);
-            $table->integer('register_verification');
-            $table->string('encrypt_id')->nullable();
-            $table->date('expired_time')->nullable();
-            $table->string('photo_profile')->nullable();
             $table->rememberToken();
             $table->timestampsTz();
         });

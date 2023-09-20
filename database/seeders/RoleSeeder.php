@@ -16,7 +16,6 @@ class RoleSeeder extends Seeder
         DB::table('roles')->truncate();
         DB::table('roles')->insert([
             ['role_name' => 'admin',],
-            ['role_name' => 'designer',],
             ['role_name' => 'customer',],
         ]);
     }

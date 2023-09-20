@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('attachments', function (Blueprint $table) {
+            $table->dropForeign('attachments_event_information_id_foreign');
+        });
     }
 };

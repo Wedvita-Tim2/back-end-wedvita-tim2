@@ -24,7 +24,6 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
-        'register_verification',
     ];
 
     public function role()
@@ -38,15 +37,37 @@ class User extends Authenticatable
         $this->belongsTo(Role::class);
     }
 
-    public function transaction()
+    public function order()
     {
         /**
-         * Has Many to Transaction
+         * Has Many to Order
          *
          * @return Collection
          *
          **/
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Order::class);
+    }
+
+    public function template()
+    {
+        /**
+         * Has Many to Template
+         *
+         * @return Collection
+         *
+         **/
+        return $this->hasMany(Template::class);
+    }
+
+    public function designerList()
+    {
+        /**
+         * Has Many to Designer List
+         *
+         * @return Collection
+         *
+         **/
+        return $this->hasOne(DesignerList::class);
     }
 
     /**
