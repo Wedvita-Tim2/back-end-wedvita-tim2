@@ -5,23 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Template extends Model
+class RateTemplate extends Model
 {
-    protected $table = 'templates';
+    protected $table = 'rate_templates';
     protected $fillable = [ 
-        'template_name',
-        'user_id' 
+        'template_id',
+        'user_id',
+        'comment',
+        'rating',
+        'rate_status' 
     ];
 
-    public function order()
+    public function template()
     {
         /**
-         * Has Many to Order
+         * Belong to Template
          *
          * @return Collection
          *
          **/
-        return $this->hasMany(Order::class);
+        $this->belongsTo(Template::class);
     }
 
     public function user()
@@ -33,16 +36,5 @@ class Template extends Model
          *
          **/
         $this->belongsTo(User::class);
-    }
-
-    public function rate()
-    {
-        /**
-         * Has Many to Rate Template
-         *
-         * @return Collection
-         *
-         **/
-        return $this->hasMany(RateTemplate::class);
     }
 }

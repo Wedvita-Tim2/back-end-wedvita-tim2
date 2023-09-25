@@ -62,12 +62,23 @@ class User extends Authenticatable
     public function designerList()
     {
         /**
-         * Has Many to Designer List
+         * Has One to Designer List
          *
          * @return Collection
          *
          **/
         return $this->hasOne(DesignerList::class);
+    }
+
+    public function rate()
+    {
+        /**
+         * Has Many to Rate
+         *
+         * @return Collection
+         *
+         **/
+        return $this->hasMany(RateTemplate::class);
     }
 
     /**

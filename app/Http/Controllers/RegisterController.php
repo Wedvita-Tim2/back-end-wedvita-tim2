@@ -36,7 +36,7 @@ class RegisterController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors()], 422);
+            return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors()]);
         }
 
         $user = User::create([
@@ -47,10 +47,6 @@ class RegisterController extends Controller
             'role_id'               => '2',
         ]);
 
-        //auto redirect to home
-        //Auth::login($user);
-        //return redirect(RouteServiceProvider::HOME); 
-
-        return response()->json(['user' => $user,'message' => 'Registration successful',], 201);
+        return response()->json(['user' => $user,'message' => 'Registrasi berhasil']);
     }
 }

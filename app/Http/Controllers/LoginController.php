@@ -14,12 +14,10 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect('/home');
+            $user = Auth::user();
+            return response()->json(['dataUser' => $user,'message' => 'Login berhasil']);
         }
 
-        return response()->json([
-            'username' => 'username salah.',
-            'password' => 'password salah.'
-        ]);
+        return response()->json(['message' => 'Username/Password salah']);
     }
 }
