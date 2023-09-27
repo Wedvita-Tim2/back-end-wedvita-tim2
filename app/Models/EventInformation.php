@@ -15,9 +15,12 @@ class EventInformation extends Model
         'groom_name',
         'groom_mother_name',
         'groom_father_name',
-        'date',
+        'date_event',
         'address',
         'building_name',
+        'cover_image',
+        'account_number',
+
  ];
 
     public function order()
@@ -42,15 +45,15 @@ class EventInformation extends Model
         return $this->hasMany(Attachment::class);
     }
 
-    public function guest()
+    public function weddingWish()
     {
         /**
-         * Has Many to Guest
+         * Has Many to Wedding Wish
         *
         * @return Collection
         *
         **/
-        return $this->hasMany(Guest::class);
+        return $this->hasMany(WeddingWish::class);
     }
 
 }
