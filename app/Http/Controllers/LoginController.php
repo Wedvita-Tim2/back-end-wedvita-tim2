@@ -15,9 +15,16 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            return response()->json(['dataUser' => $user,'message' => 'Login berhasil', 'response' => 200]);
+            return response()->json([
+                'dataUser' => $user,
+                'message' => 'Login berhasil', 
+                'response' => 200
+            ]);
         }
 
-        return response()->json(['message' => 'Username/Password salah', 'response' => 404]);
+        return response()->json([
+            'message' => 'Username/Password salah', 
+            'response' => 404
+        ]);
     }
 }
