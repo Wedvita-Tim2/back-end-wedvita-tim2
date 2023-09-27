@@ -15,8 +15,8 @@ class RegisterController extends Controller
         $rules = [
             'username'     => 'required|alpha_num|min:3',
             'email'        => 'required|email|unique:users',
-            'password'     => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
-            'phone_number' => 'required|numeric|digits_between:10,13'
+            'password'     => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'phone_number' => 'required'
         ];
         $messages = [
             'username.required'           => 'Username harus diisi!',
@@ -36,7 +36,7 @@ class RegisterController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors(), 'response' => 422]);
+            return response()->json(['message' => 'Validasi gagal ' + $validator->errors(), 'errors' => $validator->errors(), 'response' => 422]);
         }
 
         $user = User::create([
