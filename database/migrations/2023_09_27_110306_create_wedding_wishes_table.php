@@ -11,7 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('wedding_wishes', function (Blueprint $table) {
+            $table->id();
+            $table->string('guest_name');
+            $table->string('message');
+            $table->foreignId('event_information_id');
+            $table->timestampsTz();
+        });
     }
 
     /**
@@ -19,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guests');
+        Schema::dropIfExists('wedding_wishes');
     }
 };

@@ -19,9 +19,12 @@ return new class extends Migration
             $table->string('bride_father_name');
             $table->string('groom_mother_name');
             $table->string('groom_father_name');
+            $table->string('cover_image');
             $table->date('date_event');
             $table->text('address');
             $table->string('building_name');
+            $table->string('guests');
+            $table->string('account_number');
             $table->timestampsTz();
         });
     }

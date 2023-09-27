@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('wedding_wishes', function (Blueprint $table){
+            $table->foreignId('event_information_id')->change()->constrained()->onDelete('cascade');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guests');
+        Schema::table('wedding_wishes', function (Blueprint $table) {
+            $table->dropForeign('wedding_wishes_event_information_id_foreign');
+        });
     }
 };
