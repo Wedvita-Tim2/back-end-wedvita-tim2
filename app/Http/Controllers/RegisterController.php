@@ -36,7 +36,7 @@ class RegisterController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors()]);
+            return response()->json(['message' => 'Validasi gagal', 'errors' => $validator->errors(), 'response' => 422]);
         }
 
         $user = User::create([
@@ -47,6 +47,6 @@ class RegisterController extends Controller
             'role_id'               => '2',
         ]);
 
-        return response()->json(['user' => $user,'message' => 'Registrasi berhasil']);
+        return response()->json(['user' => $user,'message' => 'Registrasi berhasil', 'response' => 200]);
     }
 }
