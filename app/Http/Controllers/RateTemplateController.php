@@ -12,7 +12,7 @@ class RateTemplateController extends Controller
         $query->select('id','template_name');
     }, 'user' => function($query){
         $query->select('id', 'username');
-    }])->get();
+    }])->orderBy('rating', 'desc')->get();
     return response()->json([
         'DataRate' => $rates,
         'response' => 200
