@@ -24,7 +24,7 @@ class RateTemplate extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(Template::class);
+        return $this->belongsTo(Template::class);
     }
 
     public function user()
@@ -35,6 +35,6 @@ class RateTemplate extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

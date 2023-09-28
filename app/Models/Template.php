@@ -32,7 +32,7 @@ class Template extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function rate()
