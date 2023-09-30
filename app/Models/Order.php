@@ -24,7 +24,7 @@ class Order extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function template()
@@ -35,7 +35,7 @@ class Order extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(Template::class);
+        return $this->belongsTo(Template::class);
     }
 
     public function eventInformation()
@@ -46,7 +46,7 @@ class Order extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(EventInformation::class);
+        return $this->belongsTo(EventInformation::class);
     }
     
 }
