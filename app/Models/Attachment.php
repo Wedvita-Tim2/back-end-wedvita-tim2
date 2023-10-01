@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
 {
-    protected $table = 'attachements';
+    protected $table = 'attachments';
     protected $fillable = [
         'event_information_id',
         'attachment_name',
@@ -21,6 +21,6 @@ class Attachment extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(EventInformation::class);
+        return $this->belongsTo(EventInformation::class);
     }
 }

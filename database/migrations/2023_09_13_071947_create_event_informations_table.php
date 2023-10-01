@@ -21,10 +21,14 @@ return new class extends Migration
             $table->string('groom_father_name');
             $table->string('cover_image');
             $table->date('date_event');
-            $table->text('address');
-            $table->string('building_name');
             $table->string('guests');
             $table->string('account_number');
+            $table->string('account_holder_name');
+            $table->string('quotes')->nullable();
+            $table->text('address');
+            $table->string('building_name');
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->timestampsTz();
         });
     }

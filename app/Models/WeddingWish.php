@@ -22,6 +22,6 @@ class WeddingWish extends Model
          * @return Collection
          *
          **/
-        $this->belongsTo(EventInformation::class);
+        return $this->belongsTo(EventInformation::class);
     }
 }

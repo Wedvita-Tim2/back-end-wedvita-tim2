@@ -10,16 +10,21 @@ class EventInformation extends Model
     protected $table = 'event_informations';
     protected $fillable = [ 
         'bride_name',
+        'groom_name',
         'bride_mother_name',
         'bride_father_name',
-        'groom_name',
         'groom_mother_name',
         'groom_father_name',
+        'cover_image',
         'date_event',
+        'guests',
+        'account_number',
+        'account_holder_name',
+        'quotes',
         'address',
         'building_name',
-        'cover_image',
-        'account_number',
+        'lat',
+        'lng',
 
  ];
 
