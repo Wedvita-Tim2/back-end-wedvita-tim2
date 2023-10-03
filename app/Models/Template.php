@@ -10,7 +10,8 @@ class Template extends Model
     protected $table = 'templates';
     protected $fillable = [ 
         'template_name',
-        'user_id' 
+        'user_id',
+        'thumbnail',
     ];
 
     public function order()

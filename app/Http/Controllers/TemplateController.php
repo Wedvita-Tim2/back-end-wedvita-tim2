@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TemplateResource;
 use Illuminate\Http\Request;
 use App\Models\Template;
 
@@ -9,10 +10,21 @@ use App\Models\Template;
 class TemplateController extends Controller
 {
     public function index(){
-        $data = Template::get();
+        $data = Template::all();
+        $resource = TemplateResource::collection($data);
 
         return response()->json([
-            'data' => $data,
+            'data' => $resource,
+            'response' => 200
+        ]);
+    }
+
+    public function show($id){
+        $data = Template::findOrFail($id);
+        $resource = new TemplateResource($data);
+
+        return response()->json([
+            'data' => $resource,
             'response' => 200
         ]);
     }

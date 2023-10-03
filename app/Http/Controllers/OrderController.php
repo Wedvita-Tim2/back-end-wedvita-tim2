@@ -137,10 +137,10 @@ class OrderController extends Controller
     
            $order = new Order([
                 'order_code'           => Str::random(10),
-                'user_id'              => '2',
+                'user_id'              => $request->id,
                 'template_id'          => $id,
                 'event_information_id' => $eventInformation->id,
-                'order_verification'   => '1',
+                'order_verification'   => '0',
            ]);
            $eventInformation->order()->save($order);
            

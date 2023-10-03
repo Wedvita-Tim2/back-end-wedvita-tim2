@@ -16,14 +16,17 @@ class TemplateSeeder extends Seeder
         DB::table('templates')->truncate();
         DB::table('templates')->insert([
             [
-                'template_name' => 'Romantic Delight',
+                'template_name' => 'R&B',
                 'user_id'       => '2',
+                'thumbnail'     => 'img-4.png',
             ],[
-                'template_name' => 'Traditional Bali',
+                'template_name' => 'TraditionalBali',
                 'user_id'       => '3',
+                'thumbnail'     => 'img-4.png',
             ],[
-                'template_name' => 'Vintage Minimalist',
+                'template_name' => 'VintageMinimalist',
                 'user_id'       => '3',
+                'thumbnail'     => 'img-4.png',
             ],
         ]);
     }

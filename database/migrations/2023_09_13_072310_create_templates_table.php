@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('template_name');
             $table->foreignId('user_id');
+            $table->string('thumbnail');
             $table->timestampsTz();
         });
     }
@@ -24,6 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign('orders_template_id_foreign');
+        });
         Schema::dropIfExists('templates');
     }
 };
