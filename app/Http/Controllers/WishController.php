@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WeddingWish;
 
-class PostController extends Controller
+class WishController extends Controller
 {
 
 //Metode index
@@ -21,14 +21,14 @@ public function index()
 public function store(Request $request, $id)
 {
     $validatedData = $request->validate([
-        'title'     => 'required|max:255',
-        'content'   => 'required',
+        'guest_name'    => 'required|max:255',
+        'message'       => 'required',
     ]);
 
     $WeddingWish = WeddingWish::create([
         'guest_name'            => $request->guest_name,
         'message'               => $request->message,
-        'event_information_id'  => $request->event_information_id
+        'event_information_id'  => $id,
     ]);
 
     return response()->json([
