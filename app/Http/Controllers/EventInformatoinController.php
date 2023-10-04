@@ -11,22 +11,22 @@ class EventInformatoinController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'bride_name'=> 'required |max:255',
-            'groom_name'=> 'required |max:255',
-            'bride_mother_name'=> 'required |max:255',
-            'bride_father_name'=> 'required |max:255',
-            'groom_mother_name'=> 'required |max:255',
-            'groom_father_name'=> 'required |max:255',
-            'cover_image'=> 'required',
-            'date_event'=> 'required',
-            'guests'=> 'required',
-            'account_number'=> 'number',
-            'account_holder_name'=> 'required',
-            'quotes'=> 'required',
-            'address'=> 'required',
-            'building_name'=> 'required',
-            'lat'=> 'number',
-            'lng'=> 'number'
+            'bride_name'            => 'required |max:255',
+            'groom_name'            => 'required |max:255',
+            'bride_mother_name'     => 'required |max:255',
+            'bride_father_name'     => 'required |max:255',
+            'groom_mother_name'     => 'required |max:255',
+            'groom_father_name'     => 'required |max:255',
+            'cover_image'           => 'required',
+            'date_event'            => 'required',
+            'guests'                => 'required',
+            'account_number'        => 'number',
+            'account_holder_name'   => 'required',
+            'quotes'                => 'required',
+            'address'               => 'required',
+            'building_name'         => 'required',
+            'lat'                   => 'number',
+            'lng'                   => 'number'
             
         ]);
 
