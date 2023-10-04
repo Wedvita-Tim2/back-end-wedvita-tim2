@@ -62,7 +62,6 @@ public function update(Request $request, $id)
         // Update the wish with the new data from the request
         $weddingWish->guest_name = $request->input('guest_name');
         $weddingWish->message = $request->input('message');
-        $weddingWish->event_information_id = $request->input('event_information_id');
         $weddingWish->save();
 
         return response()->json([
