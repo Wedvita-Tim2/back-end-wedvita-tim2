@@ -7,10 +7,10 @@ use App\Models\EventInformation;
 use App\Models\Attachment;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException; // Import Exception
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File; 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -75,15 +75,21 @@ class OrderController extends Controller
 
     public function store(Request $request, $id){
         try{
-            if($request->hasfile('cover_image')){
-                $cover = $request->file('cover_image');
-                $coverName = Str::random(10) . "." . $cover->getClientOriginalName();
-                $path = public_path('assets/cover');
-                File::makeDirectory($path, 0777, true, true);
-                $location = 'assets/cover';
-                $cover->move($location, $coverName);
-            } else {
-                $coverName = 'default.png';
+            $validator = Validator::make($request->all(), [
+                'cover_image' => 'max:2048',
+                'attachment_name' => 'max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            $coverName = 'default.png';
+            if($request->has('cover_image')){
+                $coverName = Str::random(10) . "." . $request->cover_image->getClientOriginalName();
+                $extension = $request->cover_image->extension();
+
+                Storage::putFileAs('public/assets/cover', $request->cover_image, $coverName . '.' . $extension);
             }
     
             $eventInformation = EventInformation::create([
@@ -107,15 +113,10 @@ class OrderController extends Controller
     
             if ($request->has('attachment_name')) {
                 foreach ($request->file('attachment_name') as $attachmentFile) {
-                    $fileName = Str::random(10) . '.' . $attachmentFile->getClientOriginalExtension();
-                    $path = public_path('assets/attachments');
-                    
-                    if (!File::exists($path)) {
-                        File::makeDirectory($path, 0777, true, true);
-                    }
-                    
-                    $location = 'assets/attachments';
-                    $attachmentFile->move($location, $fileName);
+                    $fileName = Str::random(10) . "." . $attachmentFile->getClientOriginalName();
+                    $extension = $attachmentFile->extension();
+
+                    Storage::putFileAs('public/assets/attachments', $attachmentFile, $fileName . '.' . $extension);
             
                     $attachment = new Attachment([
                         'attachment_name' => $fileName,
@@ -136,7 +137,7 @@ class OrderController extends Controller
             }
     
            $order = new Order([
-                'order_code'           => Str::random(10),
+                'order_code'           => Str::random(15),
                 'user_id'              => $request->id,
                 'template_id'          => $id,
                 'event_information_id' => $eventInformation->id,
@@ -149,17 +150,13 @@ class OrderController extends Controller
                     'message' => 'Data Undangan Pernikahan berhasil dibuat', 
                     'response' => 200
                 ]);
-        }catch (\Exception $e) {
-            if (isset($coverName) && $coverName !== 'default.png') {
-                $coverPath = public_path('assets/cover/' . $coverName);
-                if (File::exists($coverPath)) {
-                    File::delete($coverPath);
-                }
-            }
-    
+
+        }catch (ValidationException $e) {
+            $errors = $e->validator->errors()->toArray();
             return response()->json([
                 'message' => 'Gagal membuat data Undangan Pernikahan: ' . $e->getMessage(), 
-                'response' => 500
+                'errors' => $errors,
+                'response' => 422,
             ]);
         
         }
