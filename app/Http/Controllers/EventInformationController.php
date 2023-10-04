@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\EventInformatoin;
+use App\Models\EventInformation;
 
-class EventInformatoinController extends Controller
+class EventInformationController extends Controller
 {
     //Metode update
     public function update(Request $request, $id)
@@ -20,17 +20,17 @@ class EventInformatoinController extends Controller
             'cover_image'           => 'required',
             'date_event'            => 'required',
             'guests'                => 'required',
-            'account_number'        => 'number',
+            'account_number'        => 'numeric',
             'account_holder_name'   => 'required',
             'quotes'                => 'required',
             'address'               => 'required',
             'building_name'         => 'required',
-            'lat'                   => 'number',
-            'lng'                   => 'number'
+            'lat'                   => 'numeric',
+            'lng'                   => 'numeric'
             
         ]);
 
-        $eventinformation = EventInformatoin::findOrFail($id);
+        $eventinformation = EventInformation::findOrFail($id);
         if ($eventinformation) {
             $eventinformation->bride_name = $request->input('bride_name');
             $eventinformation->groom_name = $request->input('groom_name');
@@ -61,4 +61,16 @@ class EventInformatoinController extends Controller
             ]);
         }
     }
+
+    public function destroy($id)
+    {
+    $destroy = EventInformation::findOrFail($id);
+    $destroy->delete();
+
+    return response()->json([
+        'message'   => 'Post deleted successfully',
+        'status'    => 200
+    ]);
+    }
+
 }

@@ -48,7 +48,7 @@ Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
 
 //EventInformation
 Route::post('/AddEventInformationsUpdate/{id}', [EventInformationController::class,'update']);
-
+Route::post('/AddEventInformationsDelete/{id}', [EventInformationController::class,'destroy']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
