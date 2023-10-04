@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WeddingWish;
 
-class PostController extends Controller
+class WishController extends Controller
 {
 
 //Metode index
@@ -12,8 +12,8 @@ public function index()
 {
     $posts = WeddingWish::all();
     return response()->json([
-        'posts' => $posts,
-        'response' => 200
+        'posts'     => $posts,
+        'response'  => 200
     ]);
 }
 
@@ -21,20 +21,20 @@ public function index()
 public function store(Request $request, $id)
 {
     $validatedData = $request->validate([
-        'title' => 'required|max:255',
-        'content' => 'required',
+        'guest_name'    => 'required|max:255',
+        'message'       => 'required',
     ]);
 
     $WeddingWish = WeddingWish::create([
-        'guest_name' => $request->guest_name,
-        'message' => $request->message,
-        'event_information_id' => $request->event_information_id
+        'guest_name'            => $request->guest_name,
+        'message'               => $request->message,
+        'event_information_id'  => $id,
     ]);
 
     return response()->json([
-        'WeddingWish' => $WeddingWish,
-        'message' => 'created successfully',
-        'response' => 200
+        'WeddingWish'   => $WeddingWish,
+        'message'       => 'created successfully',
+        'response'      => 200
     ]);
 }
 
@@ -43,9 +43,9 @@ public function edit($id)
 {
     $weddingWish = WeddingWish::findOrFail($id);
     return response()->json([
-        'WeddingWish' => $weddingWish,
-        'message' => 'Post found for editing',
-        'status' => 200
+        'WeddingWish'   => $weddingWish,
+        'message'       => 'Post found for editing',
+        'status'        => 200
     ]);
 }
 
@@ -53,9 +53,8 @@ public function edit($id)
 public function update(Request $request, $id)
 {
     $validatedData = $request->validate([
-        'guest_name' => 'required|max:255',
-        'message' => 'required',
-        'event_information_id' => 'required|exists:event_informations,id'
+        'guest_name'    => 'required|max:255',
+        'message'       => 'required',
     ]);
 
     $weddingWish = WeddingWish::findOrFail($id);
@@ -67,13 +66,13 @@ public function update(Request $request, $id)
         $weddingWish->save();
 
         return response()->json([
-            'message' => 'Wedding wish updated successfully',
-            'status' => 200
+            'message'   => 'Wedding wish updated successfully',
+            'status'    => 200
         ]);
     } else {
         return response()->json([
-            'message' => 'Wedding wish not found',
-            'status' => 404
+            'message'   => 'Wedding wish not found',
+            'status'    => 404
         ]);
     }
 }
@@ -85,8 +84,8 @@ public function destroy($id)
     $weddingWish->delete();
 
     return response()->json([
-        'message' => 'Post deleted successfully',
-        'status' => 200
+        'message'   => 'Post deleted successfully',
+        'status'    => 200
     ]);
 }
 }
