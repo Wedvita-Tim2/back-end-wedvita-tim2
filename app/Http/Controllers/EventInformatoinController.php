@@ -32,7 +32,6 @@ class EventInformatoinController extends Controller
 
         $eventinformation = EventInformatoin::findOrFail($id);
         if ($eventinformation) {
-            // Update the wish with the new data from the request
             $eventinformation->bride_name = $request->input('bride_name');
             $eventinformation->groom_name = $request->input('groom_name');
             $eventinformation->bride_mother_name = $request->input('bride_mother_name');
