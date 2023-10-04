@@ -9,7 +9,7 @@ use App\Http\Controllers\RateTemplateController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\WishController;
 use App\Http\Controllers\EventInformationController;
-
+use App\Http\Controllers\VerificationController;
 
 
 /*
@@ -49,6 +49,9 @@ Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
 //EventInformation
 Route::post('/AddEventInformationsUpdate/{id}', [EventInformationController::class,'update']);
 Route::post('/AddEventInformationsDelete/{id}', [EventInformationController::class,'destroy']);
+
+//VerificationController
+Route::post('/Verification/{id}', [VerificationController::class,'update']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
