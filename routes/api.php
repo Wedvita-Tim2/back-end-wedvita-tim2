@@ -22,15 +22,22 @@ use App\Http\Controllers\EventInformationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+//Register dan Login
 Route::post('/register', [RegisterController::class,'store']);
 Route::post('/login', [LoginController::class,'login']);
 
+//RateTemplateController
 Route::get('/rating', [RateTemplateController::class,'showRates']);
 
+//TemplateController
 Route::apiResource('main', TemplateController::class);
 
+//OrderController
 Route::get('/orders', [OrderController::class,'index']);
 Route::post('/postOrder/{id}', [OrderController::class,'store']);
+Route::post('/OrderShow/{id}', [OrderController::class,'show']);
+Route::post('/OrderDestroy/{id}', [OrderController::class,'destroy']);
 
 //WishController
 Route::post('/AddWishIndex', [WishController::class,'index']);
