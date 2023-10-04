@@ -55,7 +55,6 @@ public function update(Request $request, $id)
     $validatedData = $request->validate([
         'guest_name' => 'required|max:255',
         'message' => 'required',
-        'event_information_id' => 'required|exists:event_informations,id'
     ]);
 
     $weddingWish = WeddingWish::findOrFail($id);
