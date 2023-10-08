@@ -61,4 +61,16 @@ class EventInformationController extends Controller
             ]);
         }
     }
+
+    public function destroy($id)
+    {
+    $destroy = EventInformation::findOrFail($id);
+    $destroy->delete();
+
+    return response()->json([
+        'message'   => 'Post deleted successfully',
+        'status'    => 200
+    ]);
+    }
+
 }
