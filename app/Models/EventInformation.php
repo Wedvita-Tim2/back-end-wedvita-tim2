@@ -25,6 +25,7 @@ class EventInformation extends Model
         'building_name',
         'lat',
         'lng',
+        'maps_url',
 
  ];
 

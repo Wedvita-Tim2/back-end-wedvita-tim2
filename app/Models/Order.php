@@ -14,6 +14,7 @@ class Order extends Model
         'template_id',
         'event_information_id',
         'order_verification',
+        'invitation_url',
     ];
 
     public function user()

@@ -18,15 +18,15 @@ class TemplateSeeder extends Seeder
             [
                 'template_name' => 'R&B',
                 'user_id'       => '2',
-                'thumbnail'     => 'img-4.png',
+                'thumbnail'     => 'img-4.webp',
             ],[
                 'template_name' => 'TraditionalBali',
                 'user_id'       => '3',
-                'thumbnail'     => 'img-4.png',
+                'thumbnail'     => 'img-4.webp',
             ],[
                 'template_name' => 'VintageMinimalist',
                 'user_id'       => '3',
-                'thumbnail'     => 'img-4.png',
+                'thumbnail'     => 'img-4.webp',
             ],
         ]);
     }
