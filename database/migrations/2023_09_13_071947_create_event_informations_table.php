@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('building_name');
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
+            $table->string('maps_url')->nullable();
             $table->timestampsTz();
         });
     }
@@ -38,9 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('orders_event_information_id_foreign');
-        });
         Schema::dropIfExists('event_informations');
     }
 };

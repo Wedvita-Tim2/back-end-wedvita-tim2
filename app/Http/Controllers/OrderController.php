@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class OrderController extends Controller
 {
@@ -73,6 +74,22 @@ class OrderController extends Controller
         }
     }
 
+    private function storeAttachment($attachmentFile, $eventInformationId) {
+        $fileName = $attachmentFile ? Str::random(20) . '.webp' : 'default.webp';
+        $webpImageData = $attachmentFile ? Image::make($attachmentFile) : null;
+
+        if ($webpImageData) {
+            $webpImageData->encode('webp');
+            $webpImageData->resize(200, 250);
+            Storage::put('public/assets/attachments/' . $fileName, (string) $webpImageData);
+        }
+
+        return new Attachment([
+            'attachment_name' => $fileName,
+            'event_information_id' => $eventInformationId,
+        ]);
+    }
+
     public function store(Request $request, $id){
         try{
             $validator = Validator::make($request->all(), [
@@ -84,12 +101,14 @@ class OrderController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $coverName = 'default.png';
-            if($request->has('cover_image')){
-                $coverName = Str::random(10) . "." . $request->cover_image->getClientOriginalName();
-                $extension = $request->cover_image->extension();
+            $coverName = 'default.webp';
+            if($request->hasFile('cover_image')){
+                $coverName = Str::random(20) . '.webp';
+                $webpImageData = Image::make($request->cover_image);
+                $webpImageData->encode('webp');
+                $webpImageData->resize(200, 250);
 
-                Storage::putFileAs('public/assets/cover', $request->cover_image, $coverName . '.' . $extension);
+                Storage::put('public/assets/cover/' . $coverName, (string) $webpImageData);
             }
     
             $eventInformation = EventInformation::create([
@@ -111,28 +130,13 @@ class OrderController extends Controller
                 'lng'                 => $request->lng,
             ]);
     
-            if ($request->has('attachment_name')) {
+            if ($request->hasFile('attachment_name')) {
                 foreach ($request->file('attachment_name') as $attachmentFile) {
-                    $fileName = Str::random(10) . "." . $attachmentFile->getClientOriginalName();
-                    $extension = $attachmentFile->extension();
-
-                    Storage::putFileAs('public/assets/attachments', $attachmentFile, $fileName . '.' . $extension);
-            
-                    $attachment = new Attachment([
-                        'attachment_name' => $fileName,
-                        'event_information_id' => $eventInformation->id,
-                    ]);
-            
+                    $attachment = $this->storeAttachment($attachmentFile, $eventInformation->id);
                     $eventInformation->attachment()->save($attachment);
                 }
             } else {
-                $fileName = 'default.png';
-            
-                $attachment = new Attachment([
-                    'attachment_name' => $fileName,
-                    'event_information_id' => $eventInformation->id,
-                ]);
-            
+                $attachment = $this->storeAttachment(null, $eventInformation->id);
                 $eventInformation->attachment()->save($attachment);
             }
     
@@ -146,7 +150,7 @@ class OrderController extends Controller
            $eventInformation->order()->save($order);
            
            return response()->json([
-                    'eventInformation' => $eventInformation,
+                    'eventInformation' => $eventInformation->loadMissing('attachment'),
                     'message' => 'Data Undangan Pernikahan berhasil dibuat', 
                     'response' => 200
                 ]);
