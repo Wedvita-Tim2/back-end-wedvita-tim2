@@ -36,7 +36,7 @@ Route::apiResource('main', TemplateController::class);
 //OrderController
 Route::get('/orders', [OrderController::class,'index']);
 Route::post('/postOrder/{id}', [OrderController::class,'store']);
-Route::post('/OrderShow/{id}', [OrderController::class,'show']);
+Route::get('/OrderShow/{id}', [OrderController::class,'show']);
 Route::post('/OrderDestroy/{id}', [OrderController::class,'destroy']);
 
 //WishController

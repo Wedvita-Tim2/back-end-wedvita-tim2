@@ -51,7 +51,7 @@ class OrderController extends Controller
                 $query->select('id','username');
             }, 'template' => function($query){
                 $query->select('id','template_name');
-            }])->find($id);
+            }])->where('user_id', $id)->get();
 
             if ($orders->isEmpty()) {
                 throw new ModelNotFoundException('No orders found.');
