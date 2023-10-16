@@ -24,7 +24,7 @@ use App\Http\Controllers\VerificationController;
 */
 
 //Register dan Login
-Route::post('/register', [RegisterController::class,'store']);
+Route::apiResource('registers', RegisterController::class)->only('store');
 Route::post('/login', [LoginController::class,'login']);
 
 //RateTemplateController
@@ -34,10 +34,8 @@ Route::get('/rating', [RateTemplateController::class,'showRates']);
 Route::apiResource('main', TemplateController::class);
 
 //OrderController
-Route::get('/orders', [OrderController::class,'index']);
+Route::apiResource('orders', OrderController::class)->only(['index','show','destroy']);
 Route::post('/postOrder/{id}', [OrderController::class,'store']);
-Route::post('/OrderShow/{id}', [OrderController::class,'show']);
-Route::post('/OrderDestroy/{id}', [OrderController::class,'destroy']);
 
 //WishController
 Route::post('/AddWishIndex', [WishController::class,'index']);

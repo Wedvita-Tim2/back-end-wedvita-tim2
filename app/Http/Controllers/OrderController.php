@@ -47,30 +47,17 @@ class OrderController extends Controller
 
     public function show($id){
         try {
-            $orders = Order::with(['user' => function($query){
-                $query->select('id','username');
-            }, 'template' => function($query){
-                $query->select('id','template_name');
-            }])->find($id);
-
-            if ($orders->isEmpty()) {
-                throw new ModelNotFoundException('No orders found.');
-            }
+            $data = Order::findOrFail($id);
 
             return response()->json([
-                'Data' => $orders,
+                'data'     => $data,
                 'response' => 200
             ]);
-        } catch (ModelNotFoundException $e) {
+        }catch(\Exception){
             return response()->json([
-                'error' => 'Data not found',
-                'response' => 404
-            ], 404);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred.',
-                'response' => 500
-            ], 500);
+                'message'   => 'Not Found',
+                'status'    => 404
+            ]);
         }
     }
 
@@ -167,13 +154,20 @@ class OrderController extends Controller
     }
 
     public function destroy($id){
-        $destroy = Order::findOrFail($id);
-        $destroy->delete();
+        try{
+            $destroy = Order::findOrFail($id);
+            $destroy->delete();
 
-        return response()->json([
-            'message'   => 'Order deleted successfully',
-            'status'    => 200
-        ]);
+            return response()->json([
+                'message'   => 'Order deleted successfully',
+                'status'    => 200
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'message'   => 'Not Found',
+                'status'    => 404
+            ]);
+        }
     }
 
 }

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\EventInformation;
+use Illuminate\Support\Facades\Validator;
 
 class EventInformationController extends Controller
 {
     //Metode update
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'bride_name'            => 'required |max:255',
             'groom_name'            => 'required |max:255',
             'bride_mother_name'     => 'required |max:255',
@@ -29,6 +30,14 @@ class EventInformationController extends Controller
             'lng'                   => 'numeric'
             
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi gagal ' + $validator->errors(), 
+                'errors' => $validator->errors(), 
+                'response' => 422
+            ]);
+        }
 
         $eventinformation = EventInformation::findOrFail($id);
         if ($eventinformation) {
@@ -64,13 +73,13 @@ class EventInformationController extends Controller
 
     public function destroy($id)
     {
-    $destroy = EventInformation::findOrFail($id);
-    $destroy->delete();
+        $destroy = EventInformation::findOrFail($id);
+        $destroy->delete();
 
-    return response()->json([
-        'message'   => 'Post deleted successfully',
-        'status'    => 200
-    ]);
+        return response()->json([
+            'message'   => 'Post deleted successfully',
+            'status'    => 200
+        ]);
     }
 
 }
