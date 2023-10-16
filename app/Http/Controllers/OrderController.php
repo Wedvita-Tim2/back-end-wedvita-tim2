@@ -47,7 +47,7 @@ class OrderController extends Controller
 
     public function show($id){
         try {
-            $data = Order::findOrFail($id);
+            $data = Order::where('user_id', '=', $id)->get();
 
             return response()->json([
                 'data'     => $data,
