@@ -47,19 +47,7 @@ class OrderController extends Controller
 
     public function show($id){
         try {
-<<<<<<< HEAD
-            $orders = Order::with(['user' => function($query){
-                $query->select('id','username');
-            }, 'template' => function($query){
-                $query->select('id','template_name');
-            }])->where('user_id', $id)->get();
-
-            if ($orders->isEmpty()) {
-                throw new ModelNotFoundException('No orders found.');
-            }
-=======
             $data = Order::where('user_id', '=', $id)->get();
->>>>>>> 17afa81deef11c006dc0776cea7c73ca0f7e64f9
 
             return response()->json([
                 'data'     => $data,
