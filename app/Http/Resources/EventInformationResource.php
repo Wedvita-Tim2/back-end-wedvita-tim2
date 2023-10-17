@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 class EventInformationResource extends JsonResource
 {
@@ -25,7 +24,7 @@ class EventInformationResource extends JsonResource
             'groom_mother_name' => $this->groom_mother_name,
             'groom_father_name' => $this->groom_father_name,
             'cover_image' => Storage::url('public/assets/cover/' . $this->cover_image),
-            'date_event' => Carbon::createFromFormat('Y-m-d', $this->date_event)->format('d-m-Y'),
+            'date_event' => $this->date_event,
             'guests' => $this->guests,
             'account_number' => $this->account_number,
             'account_holder_name' => $this->account_holder_name,

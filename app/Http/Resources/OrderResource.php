@@ -30,7 +30,7 @@ class OrderResource extends JsonResource
             'groom_mother_name' => $this->eventInformation->groom_mother_name,
             'groom_father_name' => $this->eventInformation->groom_father_name,
             'cover_image' => Storage::url('public/assets/cover/' .   $this->eventInformation->cover_image),
-            'date_event' => $this->eventInformation->date_event->format('d-m-Y'),
+            'date_event' => $this->eventInformation->date_event,
             'guests' => $this->eventInformation->guests,
             'account_number' => $this->eventInformation->account_number,
             'account_holder_name' => $this->eventInformation->account_holder_name,
