@@ -98,7 +98,7 @@ class OrderController extends Controller
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'An error occurred.',
+                'error' => $e,
                 'response' => 500
             ], 500);
         }
