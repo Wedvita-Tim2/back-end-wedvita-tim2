@@ -10,6 +10,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\WishController;
 use App\Http\Controllers\EventInformationController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -50,6 +51,9 @@ Route::post('/AddEventInformationsDelete/{id}', [EventInformationController::cla
 
 //VerificationController
 Route::post('/Verification/{id}', [VerificationController::class,'update']);
+
+//UserController
+Route::post('/UserIndex/{id}', [UserController::class,'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
