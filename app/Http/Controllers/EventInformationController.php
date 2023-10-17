@@ -9,6 +9,7 @@ use App\Http\Requests\EventInformationRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Http\Resources\EventInformationResource;
 
 class EventInformationController extends Controller
 {
@@ -29,36 +30,23 @@ class EventInformationController extends Controller
     }
 
     private function updateAttachments($request, $eventInformation) {
-       $newAttachments = [];
-        
-        if ($request->hasFile('attachment_name')) {
-            $existingAttachments = $eventInformation->attachment()->get();
-            foreach ($request->file('attachment_name') as $attachmentFile) {
-                $attachment = $this->storeAttachment($attachmentFile, $eventInformation->id);
+        // Mendapatkan daftar attachment yang ada
+        $existingAttachments = $eventInformation->attachment;
     
+        if ($request->hasFile('attachment_name')) {
+            foreach ($request->file('attachment_name') as $attachmentFile) {
                 if ($existingAttachments->isNotEmpty()) {
-                    // Jika ada attachment yang sudah ada, perbarui dengan data baru
-                    $this->storeAttachment($attachmentFile, $eventInformation->id);
-                    #$newAttachments[] = $existingAttachment;
-                } else {
-                    // Jika tidak ada attachment yang sudah ada, buat attachment baru
-                    $eventInformation->attachment()->create([
-                        'attachment_name' => $attachment->attachment_name,
-                    ]);
-                    $newAttachments[] = $attachment;
+                    $existingAttachment = $existingAttachments->shift();
+                    if ($existingAttachment->attachment_name !== 'default.webp') {
+                        Storage::delete('public/assets/attachments/' .$existingAttachment->attachment_name);
+                        $existingAttachment->delete();
+                    }
                 }
-            }
-        }
-        
-        return $newAttachments;
-    }
-
-    private function deleteExcessAttachments($eventInformation, $newAttachments) {
-        $existingAttachments = $eventInformation->attachment()->get();
-        foreach ($existingAttachments as $attachment) {
-            if (!in_array($attachment, $newAttachments)) {
-                Storage::delete('public/assets/attachments/' . $attachment->attachment_name);
-                $attachment->delete();
+    
+                $attachment = $this->storeAttachment($attachmentFile, $eventInformation->id);
+                $eventInformation->attachment()->create([
+                    'attachment_name' => $attachment->attachment_name,
+                ]);
             }
         }
     }
@@ -97,26 +85,15 @@ class EventInformationController extends Controller
         $eventInformation->update($validatedData);
 
         // Update atau tambahkan attachment
-        $newAttachments = $this->updateAttachments($request, $eventInformation);
-    
-        // Hapus attachment yang lebih banyak
-        $this->deleteExcessAttachments($eventInformation, $newAttachments);
+        $this->updateAttachments($request, $eventInformation);
+
+        $eventInformation->refresh();
+        $resource = new EventInformationResource($eventInformation);
 
         return response()->json([
             'message' => 'Event Information updated successfully',
-            'eventInformation' => $eventInformation->loadMissing('attachment'),
+            'eventInformation' => $resource,
             'status'  => 200
-        ]);
-    }
-
-    public function destroy($id)
-    {
-        $destroy = EventInformation::findOrFail($id);
-        $destroy->delete();
-
-        return response()->json([
-            'message'   => 'Post deleted successfully',
-            'status'    => 200
         ]);
     }
 

@@ -49,7 +49,6 @@ Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
 //EventInformation
 Route::get('/event', [EventInformationController::class,'index']);
 Route::post('/event/update/{id}', [EventInformationController::class,'update']);
-Route::post('/event/delete/{id}', [EventInformationController::class,'destroy']);
 // Route::apiResource('eventInformations', EventInformationController::class)->only(['update','index','destroy']);
 
 //VerificationController
