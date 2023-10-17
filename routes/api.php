@@ -36,6 +36,7 @@ Route::apiResource('main', TemplateController::class);
 //OrderController
 Route::apiResource('orders', OrderController::class)->only(['index','show','destroy']);
 Route::post('/postOrder/{id}', [OrderController::class,'store']);
+Route::get('/showOrderDetail/{order_code}', [OrderController::class,'showDetail']);
 
 //WishController
 Route::post('/AddWishIndex', [WishController::class,'index']);
@@ -45,8 +46,10 @@ Route::post('/AddWishUpdate/{id}', [WishController::class,'update']);
 Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
 
 //EventInformation
-Route::post('/AddEventInformationsUpdate/{id}', [EventInformationController::class,'update']);
-Route::post('/AddEventInformationsDelete/{id}', [EventInformationController::class,'destroy']);
+Route::get('/event', [EventInformationController::class,'index']);
+Route::post('/event/update/{id}', [EventInformationController::class,'update']);
+Route::post('/event/delete/{id}', [EventInformationController::class,'destroy']);
+// Route::apiResource('eventInformations', EventInformationController::class)->only(['update','index','destroy']);
 
 //VerificationController
 Route::post('/Verification/{id}', [VerificationController::class,'update']);
