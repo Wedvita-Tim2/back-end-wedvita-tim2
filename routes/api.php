@@ -10,6 +10,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\WishController;
 use App\Http\Controllers\EventInformationController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -36,8 +37,7 @@ Route::apiResource('main', TemplateController::class);
 //OrderController
 Route::apiResource('orders', OrderController::class)->only(['index','show','destroy']);
 Route::post('/postOrder/{id}', [OrderController::class,'store']);
-Route::get('/OrderShow/{id}', [OrderController::class,'show']);
-Route::post('/OrderDestroy/{id}', [OrderController::class,'destroy']);
+Route::get('/showOrderDetail/{order_code}', [OrderController::class,'showDetail']);
 
 //WishController
 Route::post('/AddWishIndex', [WishController::class,'index']);
@@ -47,11 +47,16 @@ Route::post('/AddWishUpdate/{id}', [WishController::class,'update']);
 Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
 
 //EventInformation
-Route::post('/AddEventInformationsUpdate/{id}', [EventInformationController::class,'update']);
-Route::post('/AddEventInformationsDelete/{id}', [EventInformationController::class,'destroy']);
+Route::get('/event', [EventInformationController::class,'index']);
+Route::post('/event/update/{id}', [EventInformationController::class,'update']);
+Route::post('/event/delete/{id}', [EventInformationController::class,'destroy']);
+// Route::apiResource('eventInformations', EventInformationController::class)->only(['update','index','destroy']);
 
 //VerificationController
 Route::post('/Verification/{id}', [VerificationController::class,'update']);
+
+//UserController
+Route::post('/UserIndex/{id}', [UserController::class,'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
