@@ -80,7 +80,7 @@ class OrderController extends Controller
                 $query->select('id','username');
             }, 'template' => function($query){
                 $query->select('id','template_name');
-            }])->where('order_code', $order_code)->with('user.template.eventInformation.attachment')->get();
+            }])->where('order_code', $order_code)->with('eventInformation.attachment')->get();
             $resource = OrderResource::collection($orders);
 
             if ($orders->isEmpty()) {
@@ -98,7 +98,7 @@ class OrderController extends Controller
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'An error occurred.',
+                'error' => $e,
                 'response' => 500
             ], 500);
         }
