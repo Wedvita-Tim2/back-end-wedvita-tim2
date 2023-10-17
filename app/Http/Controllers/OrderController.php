@@ -22,7 +22,7 @@ class OrderController extends Controller
                 $query->select('id','username');
             }, 'template' => function($query){
                 $query->select('id','template_name');
-            }])->get();
+            }])->orderBy('id','ASC')->get();
 
             if ($orders->isEmpty()) {
                 throw new ModelNotFoundException('No orders found.');
@@ -80,7 +80,7 @@ class OrderController extends Controller
                 $query->select('id','username');
             }, 'template' => function($query){
                 $query->select('id','template_name');
-            }])->where('order_code', $order_code)->with('user.template.eventInformation.attachment')->get();
+            }])->where('order_code', $order_code)->with('eventInformation.attachment')->get();
             $resource = OrderResource::collection($orders);
 
             if ($orders->isEmpty()) {
@@ -168,6 +168,7 @@ class OrderController extends Controller
     public function destroy($id){
         try{
             $destroy = Order::findOrFail($id);
+            $destroy->eventInformation()->delete();
             $destroy->delete();
 
             return response()->json([

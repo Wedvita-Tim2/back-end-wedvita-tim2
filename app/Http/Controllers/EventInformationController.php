@@ -28,10 +28,44 @@ class EventInformationController extends Controller
         ]);
     }
 
+    private function updateAttachments($request, $eventInformation) {
+       $newAttachments = [];
+        
+        if ($request->hasFile('attachment_name')) {
+            $existingAttachments = $eventInformation->attachment()->get();
+            foreach ($request->file('attachment_name') as $attachmentFile) {
+                $attachment = $this->storeAttachment($attachmentFile, $eventInformation->id);
+    
+                if ($existingAttachments->isNotEmpty()) {
+                    // Jika ada attachment yang sudah ada, perbarui dengan data baru
+                    $this->storeAttachment($attachmentFile, $eventInformation->id);
+                    #$newAttachments[] = $existingAttachment;
+                } else {
+                    // Jika tidak ada attachment yang sudah ada, buat attachment baru
+                    $eventInformation->attachment()->create([
+                        'attachment_name' => $attachment->attachment_name,
+                    ]);
+                    $newAttachments[] = $attachment;
+                }
+            }
+        }
+        
+        return $newAttachments;
+    }
+
+    private function deleteExcessAttachments($eventInformation, $newAttachments) {
+        $existingAttachments = $eventInformation->attachment()->get();
+        foreach ($existingAttachments as $attachment) {
+            if (!in_array($attachment, $newAttachments)) {
+                Storage::delete('public/assets/attachments/' . $attachment->attachment_name);
+                $attachment->delete();
+            }
+        }
+    }
+
     public function update(EventInformationRequest $request, $id)
     {
         //Check Event Information
-        //dd($request);
         $eventInformation = EventInformation::find($id);
         if (!$eventInformation) {
             return response()->json([
@@ -62,31 +96,11 @@ class EventInformationController extends Controller
         $validatedData['cover_image'] = $coverName;
         $eventInformation->update($validatedData);
 
-        //Looping & Store attachment
-        $attachments = Attachment::where('event_information_id', $eventInformation->id)->get();
-        foreach ($request->file('attachment_name') as $attachmentFile) {
-            $attachment = $this->storeAttachment($attachmentFile, $eventInformation->id);
-            
-            if ($attachments->isNotEmpty()) {
-                // Jika attachment sudah ada, perbarui dengan data baru
-                $attachments->shift()->update([
-                    'attachment_name' => $attachment->attachment_name,
-                ]);
-            } else {
-                // Jika tidak ada attachment yang sudah ada, buat attachment baru
-                $eventInformation->attachment()->create([
-                    'attachment_name' => $attachment->attachment_name,
-                ]);
-            }
-        }
-
+        // Update atau tambahkan attachment
+        $newAttachments = $this->updateAttachments($request, $eventInformation);
+    
         // Hapus attachment yang lebih banyak
-        if ($attachments->isNotEmpty()) {
-            $attachments->each(function ($attachment) {
-                Storage::delete('public/assets/attachments/' . $attachment->attachment_name);
-                $attachment->delete();
-            });
-        }
+        $this->deleteExcessAttachments($eventInformation, $newAttachments);
 
         return response()->json([
             'message' => 'Event Information updated successfully',
