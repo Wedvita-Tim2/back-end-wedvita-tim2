@@ -20,6 +20,7 @@ class TemplateResource extends JsonResource
             'template_name' => $this->template_name,
             'thumbnail' => Storage::url('public/assets/thumbnails/' . $this->thumbnail),
             'user_id' => $this->user_id,
+            'price' => $this->price,
         ];
     }
 }

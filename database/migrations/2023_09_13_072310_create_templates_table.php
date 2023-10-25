@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->text('desc')->nullable();
             $table->timestampsTz();
+            $table->integer('price');
         });
     }
 

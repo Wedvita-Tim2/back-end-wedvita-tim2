@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('guests');
             $table->string('account_number');
             $table->string('account_holder_name');
-            $table->string('quotes')->nullable();
+            $table->text('quotes')->nullable();
             $table->text('address');
             $table->string('building_name');
             $table->string('lat')->nullable();

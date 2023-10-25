@@ -12,6 +12,7 @@ class Template extends Model
         'template_name',
         'user_id',
         'thumbnail',
+        'price',
     ];
 
     public function order()
