@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Contracts\Validation\Validator; 
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EventInformationRequest extends FormRequest
 {
@@ -47,10 +48,10 @@ class EventInformationRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        return response()->json([
+        throw new HttpResponseException(response()->json([
             'message' => 'Validasi gagal ',
             'errors' => $validator->errors(), 
             'response' => 422
-        ]);
+        ]));
     }
 }

@@ -168,17 +168,22 @@ class OrderController extends Controller
     public function destroy($id){
         try{
             $destroy = Order::findOrFail($id);
-            $destroy->eventInformation()->delete();
+            $eventInformation = $destroy->eventInformation;
+
+            foreach ($eventInformation->attachment as $attachment) {
+                Storage::delete('public/assets/attachments/' . $attachment->attachment_name);
+            }
+            Storage::delete('public/assets/cover/' . $eventInformation->cover_image);                $eventInformation->delete();
             $destroy->delete();
 
             return response()->json([
                 'message'   => 'Order deleted successfully',
                 'status'    => 200
             ]);
-        }catch(\Exception){
+        }catch(ModelNotFoundException $e){
             return response()->json([
                 'message'   => 'Not Found',
-                'status'    => 404
+                'status'    => 404,
             ]);
         }
     }
