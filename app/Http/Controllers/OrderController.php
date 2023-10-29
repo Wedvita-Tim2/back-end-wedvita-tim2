@@ -173,7 +173,9 @@ class OrderController extends Controller
             foreach ($eventInformation->attachment as $attachment) {
                 Storage::delete('public/assets/attachments/' . $attachment->attachment_name);
             }
-            Storage::delete('public/assets/cover/' . $eventInformation->cover_image);                $eventInformation->delete();
+            Storage::delete('public/assets/cover/' . $eventInformation->cover_image);                
+            $eventInformation->delete();
+            $attachment->delete();
             $destroy->delete();
 
             return response()->json([
