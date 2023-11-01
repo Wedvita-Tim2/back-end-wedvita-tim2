@@ -32,7 +32,9 @@ Route::post('/login', [LoginController::class,'login']);
 Route::get('/rating', [RateTemplateController::class,'showRates']);
 
 //TemplateController
-Route::apiResource('main', TemplateController::class);
+Route::apiResource('main', TemplateController::class)->only(['index', 'show', 'destroy']);
+Route::post('/postTemplate', [TemplateController::class, 'store']);
+Route::post('/updateTemplate/{id}', [TemplateController::class, 'update']);
 
 //OrderController
 Route::apiResource('orders', OrderController::class)->only(['index','show','destroy']);
