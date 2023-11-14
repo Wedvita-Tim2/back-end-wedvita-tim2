@@ -43,11 +43,8 @@ Route::post('/postOrder/{id}', [OrderController::class,'store']);
 Route::get('/showOrderDetail/{order_code}', [OrderController::class,'showDetail']);
 
 //WishController
-Route::post('/AddWishIndex', [WishController::class,'index']);
-Route::post('/AddWishStore/{id}', [WishController::class,'store']);
-Route::post('/AddWishEdit/{id}', [WishController::class,'edit']);
-Route::post('/AddWishUpdate/{id}', [WishController::class,'update']);
-Route::post('/AddWishDestroy/{id}', [WishController::class,'destroy']);
+Route::apiResource('/wishes', WishController::class)->only('index','show','update','destroy');
+Route::post('/AddWish/{id}', [WishController::class,'store']);
 
 //EventInformation
 Route::get('/event', [EventInformationController::class,'index']);

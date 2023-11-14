@@ -37,6 +37,22 @@ public function store(Request $request, $id)
         'response'      => 200
     ]);
 }
+public function show($eventInformation)
+{
+    try{
+        $wishData = WeddingWish::where('event_information_id', $eventInformation)->get();
+
+        return response()->json([
+            'wishData' => $wishData,
+            'response' => 200
+        ]);
+    } catch(\Exception $e){
+        return response()->json([
+            'message'   => 'An error occurred. ' . $e,
+            'status'    => 500
+        ]);
+    }
+}
 
 //Metode edit
 public function edit($id)
