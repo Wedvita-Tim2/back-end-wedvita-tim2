@@ -12,6 +12,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use App\Http\Resources\OrderResource;
+use App\Models\Template;
+use App\Models\User;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
@@ -53,9 +56,6 @@ class OrderController extends Controller
                 $query->select('id','template_name');
             }])->where('user_id', $id)->get();
 
-            if ($orders->isEmpty()) {
-                throw new ModelNotFoundException('No orders found.');
-            }
 
             return response()->json([
                 'Data' => $orders->loadMissing('eventInformation'),
@@ -68,7 +68,7 @@ class OrderController extends Controller
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'An error occurred.',
+                'error' => 'An error occurred.'.$e,
                 'response' => 500
             ], 500);
         }
@@ -83,9 +83,6 @@ class OrderController extends Controller
             }])->where('order_code', $order_code)->with('eventInformation.attachment')->get();
             $resource = OrderResource::collection($orders);
 
-            if ($orders->isEmpty()) {
-                throw new ModelNotFoundException('No orders found.');
-            }
 
             return response()->json([
                 'Data' => $resource,
@@ -149,13 +146,47 @@ class OrderController extends Controller
         }
     
         //Store Order
+        $order_code = Str::random(15);
         $order = new Order([
-            'order_code'           => Str::random(15),
+            'order_code'           => $order_code,
             'user_id'              => $request->id,
             'template_id'          => $id,
             'event_information_id' => $eventInformation->id,
             'order_verification'   => '0',
         ]);
+
+        //Midtrans Operation
+        $template = Template::findOrFail($id);
+        $user = User::findOrFail($request->id);
+        //Params midtrans
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order_code,
+                'gross_amount' => $template->price
+            ),
+            'item_details'=> array(array(
+                'id' => $eventInformation->id,
+                'name' => 'Wedvita '.$eventInformation->groom_name . ' & '. $eventInformation->bride_name,
+                'price' => $template->price,
+                'quantity' => 1
+            )
+            ),
+            'customer_details' => array(
+                'first_name' => $user->username,
+                'email' => $user->email
+            )
+        );
+
+        $auth = base64_encode(env('SERVER_KEY_MIDTRANS'));
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => "Basic $auth"
+        ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
+
+        $response = json_decode($response->body());
+
+        $order->checkout_url = $response->redirect_url;
+        $order->save();
         $eventInformation->order()->save($order);
            
         return response()->json([

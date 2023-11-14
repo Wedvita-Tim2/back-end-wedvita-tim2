@@ -24,7 +24,13 @@ hapus tanda (;) di:
 4. extension=pdo_pgsql
 5. extension=zip
 
+F. Konfigurasi SSL perm (lokasi: C:/tools/php82/php.ini)
 
+1. Download cacert.pem file ('https://curl.se/docs/caextract.html')
+2. Pindahkan file cacert.pem ke 'C:\tools\php\extras\ssl\'
+3. Php.ini atur hapus(;)
+    a. curl.cainfo = "C:\tools\php\extras\ssl\cacert.pem"
+    b. openssl.cafile= "C:\tools\php\extras\ssl\cacert.pem"
 !!Lakukan Semua!!
 
 

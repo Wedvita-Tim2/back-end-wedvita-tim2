@@ -11,6 +11,7 @@ use App\Http\Controllers\WishController;
 use App\Http\Controllers\EventInformationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
 
 
 /*
@@ -56,8 +57,11 @@ Route::post('/event/update/{id}', [EventInformationController::class,'update']);
 //VerificationController
 Route::post('/Verification/{id}', [VerificationController::class,'update']);
 
+//PaymentController
+Route::post('/webhook/midtrans', [PaymentController::class,'webhook']);
+
 //UserController
-Route::post('/UserIndex/{id}', [UserController::class,'index']);
+Route::post('/UserIndex/{order_id}', [UserController::class,'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

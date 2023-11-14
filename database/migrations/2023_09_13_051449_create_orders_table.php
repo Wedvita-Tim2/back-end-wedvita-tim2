@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('event_information_id');
             $table->integer('order_verification');
             $table->string('invitation_url')->nullable();
+            $table->text('checkout_url')->nullable();
             $table->timestampsTz();
         });
     }

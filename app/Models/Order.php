@@ -15,6 +15,7 @@ class Order extends Model
         'event_information_id',
         'order_verification',
         'invitation_url',
+        'checkout_url'
     ];
 
     public function user()

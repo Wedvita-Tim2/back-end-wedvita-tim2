@@ -49,7 +49,7 @@ class EventInformationRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'message' => 'Validasi gagal ',
+            'message' => 'Validasi gagal '.$validator->errors(),
             'errors' => $validator->errors(), 
             'response' => 422
         ]));
