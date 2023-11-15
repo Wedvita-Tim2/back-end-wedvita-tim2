@@ -37,10 +37,12 @@ public function store(Request $request, $id)
         'response'      => 200
     ]);
 }
-public function show($eventInformation)
+public function show($event_information_id)
 {
     try{
-        $wishData = WeddingWish::where('event_information_id', $eventInformation)->get();
+        $wishData = WeddingWish::where('event_information_id', $event_information_id)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return response()->json([
             'wishData' => $wishData,
@@ -49,7 +51,7 @@ public function show($eventInformation)
     } catch(\Exception $e){
         return response()->json([
             'message'   => 'An error occurred. ' . $e,
-            'status'    => 500
+            'response'    => 500
         ]);
     }
 }
