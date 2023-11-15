@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentMail;
+use App\Mail\PaymentFailMail;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -20,7 +24,7 @@ class PaymentController extends Controller
             $response = json_decode($response->body());
 
             $order = Order::where('order_code', $response->order_id)->firstOrFail();
-
+            $user = User::findOrFail($order->user_id);
     
             if($order->order_verification === 1){
                 return response()->json('Payment has been already processed');
@@ -32,19 +36,58 @@ class PaymentController extends Controller
             }
             else if($response->transaction_status === 'pending'){
                 // Handle pending status
+                $expiryTime = $response->expiry_time;
+                $content = [
+                    'subject' => 'Menunggu Pembayaran',
+                    'user'=> $user->username,
+                    'body' => 'bayar undangan digital anda sebelum',
+                    'expiryTime' => $expiryTime,
+                    'price' => $response->gross_amount,
+                ];
+                
+                Mail::to($user->email)->send(new PaymentMail($content));
+        
             }
             else if($response->transaction_status === 'deny'){
                 // Handle deny status
+                $content = [
+                    'subject' => 'Order Dihapus',
+                    'user'=> $user->username,
+                    'body' => 'Admin menolak pembayaran dengan order code '. $response->order_id,
+                    'status' =>'deny'
+                ];
+                
+                Mail::to($user->email)->send(new PaymentFailMail($content));
                 $orderController = App::make('App\Http\Controllers\OrderController');
                 $orderController->destroy($order->id);
             }
             else if($response->transaction_status === 'cancel'){
                 // Handle cancel status
+                $content = [
+                    'subject' => 'Order Dihapus',
+                    'user'=> $user->username,
+                    'body' => 'Admin membatalkan pembayaran dengan order code '. $response->order_id,
+                    'status' =>'cancel'
+                ];
+                
+                Mail::to($user->email)->send(new PaymentFailMail($content));
+                $orderController = App::make('App\Http\Controllers\OrderController');
+                $orderController->destroy($order->id);
                 $orderController = App::make('App\Http\Controllers\OrderController');
                 $orderController->destroy($order->id);
             }
             else if($response->transaction_status === 'expire'){
                 // Handle expire status
+                $content = [
+                    'subject' => 'Order Dihapus',
+                    'user'=> $user->username,
+                    'body' => 'Pembayaran sudah melewati batas expire/kadaluwarsa',
+                    'status' =>'expire'
+                ];
+                
+                Mail::to($user->email)->send(new PaymentFailMail($content));
+                $orderController = App::make('App\Http\Controllers\OrderController');
+                $orderController->destroy($order->id);
                 $orderController = App::make('App\Http\Controllers\OrderController');
                 $orderController->destroy($order->id);
             }
