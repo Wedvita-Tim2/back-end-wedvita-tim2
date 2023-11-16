@@ -73,8 +73,7 @@ class PaymentController extends Controller
                 Mail::to($user->email)->send(new PaymentFailMail($content));
                 $orderController = App::make('App\Http\Controllers\OrderController');
                 $orderController->destroy($order->id);
-                $orderController = App::make('App\Http\Controllers\OrderController');
-                $orderController->destroy($order->id);
+                
             }
             else if($response->transaction_status === 'expire'){
                 // Handle expire status
@@ -88,8 +87,7 @@ class PaymentController extends Controller
                 Mail::to($user->email)->send(new PaymentFailMail($content));
                 $orderController = App::make('App\Http\Controllers\OrderController');
                 $orderController->destroy($order->id);
-                $orderController = App::make('App\Http\Controllers\OrderController');
-                $orderController->destroy($order->id);
+                
             }
     
             $order->save();
