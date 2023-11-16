@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaymentMail;
 use App\Mail\PaymentFailMail;
+use App\Mail\PaymentSuccessMail;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
@@ -33,6 +34,14 @@ class PaymentController extends Controller
             if($response->transaction_status === 'capture' || $response->transaction_status === 'settlement'){
                 $order->order_verification = 1;
                 $order->invitation_url = '/invitation' .'/'. $order->template_id . '/' . $order->order_code;
+                $content = [
+                    'subject' => 'Wedvita Anda Siap Untuk Diakses',
+                    'user'=> $user->username,
+                    'body' => 'selamat pembayaran berhasil, berikut tautan wedvita anda',
+                    'link' => 'localhost:3000/invitation' .'/'. $order->template_id . '/' . $order->order_code
+                ];
+                
+                Mail::to($user->email)->send(new PaymentSuccessMail($content));
             }
             else if($response->transaction_status === 'pending'){
                 // Handle pending status
