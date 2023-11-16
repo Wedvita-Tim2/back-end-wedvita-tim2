@@ -19,17 +19,22 @@ class TemplateSeeder extends Seeder
                 'template_name' => 'R&B',
                 'user_id'       => '2',
                 'thumbnail'     => 'img-4.webp',
-                'price'         => '79000',
+                'price'         => '40000',
             ],[
-                'template_name' => 'TraditionalBali',
+                'template_name' => 'BlueFlower',
                 'user_id'       => '3',
-                'thumbnail'     => 'img-4.webp',
-                'price'         => '90000'
+                'thumbnail'     => 'template2.webp',
+                'price'         => '45000'
             ],[
-                'template_name' => 'VintageMinimalist',
+                'template_name' => 'Monovita',
                 'user_id'       => '3',
-                'thumbnail'     => 'img-4.webp',
-                'price'         => '100000'
+                'thumbnail'     => 'template3.webp',
+                'price'         => '50000'
+            ],[
+                'template_name' => 'LuxuryVita',
+                'user_id'       => '3',
+                'thumbnail'     => 'template4.webp',
+                'price'         => '45000'
             ],
         ]);
     }
