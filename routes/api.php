@@ -63,3 +63,5 @@ Route::post('/UserIndex/{order_id}', [UserController::class,'index']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('email/verify/{id}', [RegisterController::class, 'verify'])->name('verification');
